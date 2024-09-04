@@ -29,8 +29,8 @@ const char* apiEndpoint = "https://public-rc-car.onrender.com/status";
 // Define speed constants
 #define MAX_SPEED 255
 #define HIGH_SPEED 200  // ~78% of max speed
-#define MEDIUM_SPEED 150  // ~10% of max speed
-#define LOW_SPEED 150  // ~10% of max speed
+#define MEDIUM_SPEED 175  // ~10% of max speed
+#define LOW_SPEED 175  // ~10% of max speed
 
 unsigned long lastFetchTime = 0;
 const unsigned long fetchInterval = 1000; // Fetch every 1 second
