@@ -132,7 +132,8 @@
       const buttons = ["forward", "left", "stop", "right", "reverse"];
       const statusElement = document.getElementById("status");
       let sessionId = null;
-
+    
+      // Add event listeners to the buttons
       buttons.forEach((button) => {
         const el = document.getElementById(button);
         el.addEventListener("mousedown", () => handleButtonPress(button));
@@ -143,7 +144,34 @@
         el.addEventListener("mouseup", handleButtonRelease);
         el.addEventListener("touchend", handleButtonRelease);
       });
-
+    
+      // Add event listeners for keyboard controls
+      document.addEventListener("keydown", (e) => {
+        switch (e.key) {
+          case 'w':
+              handleButtonPress("forward");
+              break;
+          case 'a':
+              handleButtonPress("left");
+              break;
+          case 's':
+              handleButtonPress("reverse");
+              break;
+          case 'd':
+              handleButtonPress("right");
+              break;
+          case ' ':
+              handleButtonPress("stop");
+              break;
+        }
+      });
+    
+      document.addEventListener("keyup", (e) => {
+        if (['w', 'a', 's', 'd', ' '].includes(e.key)) {
+          handleButtonRelease();
+        }
+      });
+    
       function handleButtonPress(control) {
         if (!sessionId) {
           sessionId = Date.now().toString();
@@ -151,14 +179,14 @@
         sendCommand(control);
         updateStatus(control);
       }
-
+    
       function handleButtonRelease() {
         if (sessionId) {
           sendCommand("stop");
           sessionId = null;
         }
       }
-
+    
       function sendCommand(control) {
         fetch(
           `https://public-rc-car.onrender.com/set-command?value=${control}&id=${sessionId}`,
@@ -184,13 +212,13 @@
             statusElement.textContent = "Error: Failed to send command";
           });
       }
-
+    
       function updateStatus(control) {
         statusElement.textContent = `Status: ${
           control.charAt(0).toUpperCase() + control.slice(1)
         }`;
       }
-
+    
       function fetchStatus() {
         fetch("https://public-rc-car.onrender.com/status")
           .then((response) => response.text())
@@ -201,9 +229,10 @@
             console.error("Error fetching status:", error);
           });
       }
-
+    
       // Fetch status every 5 seconds
-      setInterval(fetchStatus, 50);
+      setInterval(fetchStatus, 5000);
     </script>
+    
   </body>
 </html>
